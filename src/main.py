@@ -78,10 +78,14 @@ async def on_ready():
 # .opt_int
 @client.tree.command()
 async def opt_in(interaction: discord.Interaction):
-    users.append(interaction.user)
-    userNames.append(interaction.user.name)
-    userChance[interaction.user.name] = 2
-    await interaction.response.send_message(f'You have been opted in {interaction.user.mention}')
+
+    if interaction.user in users:
+        await interaction.response.send_message(f'You are already registered!')
+    else:
+        users.append(interaction.user)
+        userNames.append(interaction.user.name)
+        userChance[interaction.user.name] = 2
+        await interaction.response.send_message(f'You have been opted in {interaction.user.mention}')
 
 # .opt_out
 @client.tree.command()
@@ -119,11 +123,11 @@ async def getTimeLoop(chan: discord.abc.GuildChannel):
                     k=1
                 )[0]
 
-                msg = chosen + " " +', '.join(f'{user.mention}' for user in users) + "\n\n-# React to the message to keep checking. You will automatically be opted out if you miss two!"
+                msg = chosen + " " +', '.join(f'{user.mention}' for user in users) + "\n\n-# React to the message to keep checking. You will automatically be opted out if you consecutively miss two!"
                 message = await chan.send(msg)
                 await message.add_reaction("✅")
                 message = await chan.fetch_message(message.id)
-                await asyncio.sleep(5)
+                await asyncio.sleep(5 * 60)
                 await checkReactions(message, chan)
 
 
