@@ -3,9 +3,9 @@
 pkgs.mkShell {
   packages = [
     (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
-      pandas
       requests
       discordpy
+      ruff
     ]))
   ];
 

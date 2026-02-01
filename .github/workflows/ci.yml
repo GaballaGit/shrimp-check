@@ -18,18 +18,7 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Enter dev shell
-        run: |
-          nix develop -c python -m compileall src
+        run: nix develop 
 
-      - name: Import check
-        run: |
-          nix develop -c bash -c "
-            export BOT_TOKEN=dummy
-            export SERVER_ID=1
-            export CHANNEL_ID=1
-            python - <<EOF
-            import src.main
-            print('Import OK')
-            EOF
-          "
-
+      - name: Make lint
+        run: make lint
