@@ -127,8 +127,8 @@ async def getTimeLoop(chan: discord.abc.GuildChannel):
                 await checkReactions(message, chan)
 
 
-            sleepTime = random.randint(2, 7)
-            await asyncio.sleep(sleepTime)
+            sleepTime = random.randint(20, 160)
+            await asyncio.sleep(sleepTime * 60)
 
 
 # --------- check ---------
