@@ -76,14 +76,6 @@ async def on_ready():
     chan = await getChannel()
     client.loop.create_task(getTimeLoop(chan))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    
-    if message.content.startswith('$hello'):
-        await message.channel.send("Hello!!!")
-
 # .opt_int
 @client.tree.command()
 async def opt_in(interaction: discord.Interaction):
@@ -155,9 +147,9 @@ async def getTimeLoop(chan: discord.abc.GuildChannel):
 
                 # --------- end of check ---------
 
-            sleepTime = random.randint(5, 10)
+            sleepTime = random.randint(20, 160)
             print(sleepTime, "=>", sleepTime*60)
-            await asyncio.sleep(sleepTime)
+            await asyncio.sleep(sleepTime * 60)
 
 
 # --------- run ---------
