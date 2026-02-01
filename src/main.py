@@ -63,7 +63,7 @@ messagepool = [
 ]
 # --------- commands: --------- 
 
-cmd_list = ["$hello", "opt_in", "opt_out", "whos_in"]
+cmd_list = ["opt_in", "opt_out", "whos_in"]
 
 # .when the bot loads 
 @client.event
@@ -124,31 +124,28 @@ async def getTimeLoop(chan: discord.abc.GuildChannel):
                 await message.add_reaction("✅")
                 message = await chan.fetch_message(message.id)
                 await asyncio.sleep(5)
+                await checkReactions(message, chan)
 
-                # --------- check ---------
-                print("check")
-                print(message)
-                for reaction in message.reactions:
-                    print(reaction)
-                    if str(reaction.emoji) == "✅":
-                           reaction_users = [user async for user in reaction.users() if not user.bot]
-                           print(reaction_users)
-                           for user in users:
-                            if user in reaction_users:
-                               userChance[user.name] = 2
-                            else:
-                                userChance[user.name] -= 1
-                                if userChance[user.name] <= 0:
-                                    await chan.send(f'{user.mention} has been opted out for 2 missed reactions')
-                                    users.remove(user)
-                                    userNames.remove(user.name)
-                                    del userChance[user.name]
 
-                # --------- end of check ---------
+            sleepTime = random.randint(2, 7)
+            await asyncio.sleep(sleepTime)
 
-            sleepTime = random.randint(20, 160)
-            print(sleepTime, "=>", sleepTime*60)
-            await asyncio.sleep(sleepTime * 60)
+
+# --------- check ---------
+async def checkReactions(message: discord.Message, chan: discord.abc.GuildChannel):
+    for reaction in message.reactions:
+        if str(reaction.emoji) == "✅":
+               reaction_users = [user async for user in reaction.users() if not user.bot]
+               for user in users:
+                if user in reaction_users:
+                   userChance[user.name] = 2
+                else:
+                    userChance[user.name] -= 1
+                    if userChance[user.name] <= 0:
+                        await chan.send(f'{user.mention} has been opted out for 2 missed reactions')
+                        users.remove(user)
+                        userNames.remove(user.name)
+                        del userChance[user.name]
 
 
 # --------- run ---------
